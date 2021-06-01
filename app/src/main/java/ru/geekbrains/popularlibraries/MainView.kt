@@ -1,5 +1,7 @@
 package ru.geekbrains.popularlibraries
 
 interface MainView {
-    fun setButtonText(index: Int, text: String)
+    fun setCounter1Value(value: String)
+    fun setCounter2Text(value: String)
+    fun setCounter3Text(value: String)
 }

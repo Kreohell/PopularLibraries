@@ -2,7 +2,6 @@ package ru.geekbrains.popularlibraries
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.View
 import ru.geekbrains.popularlibraries.databinding.ActivityMainBinding
 
@@ -10,29 +9,30 @@ import ru.geekbrains.popularlibraries.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), MainView {
 
     private var vb: ActivityMainBinding? = null
-    val presenter = MainPresenter(this)
+    val presenter = MainPresenter(CountersModel(), this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vb = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(vb?.root)
-
-        val listener = View.OnClickListener {
-            presenter.counterClick(it.id)
-        }
-
-        vb?.btnCounter1?.setOnClickListener(listener)
-        vb?.btnCounter2?.setOnClickListener(listener)
-        vb?.btnCounter3?.setOnClickListener(listener)
+        vb = ActivityMainBinding
+            .inflate(layoutInflater)
+            .also { vb -> setContentView(vb.root) }
+            .apply {
+                btnCounter1.setOnClickListener { presenter.counter1Click() }
+                btnCounter2.setOnClickListener { presenter.counter2Click() }
+                btnCounter3.setOnClickListener { presenter.counter3Click() }
+            }
     }
 
-    //Подсказка к ПЗ: поделить на 3 отдельные функции и избавиться от index
-    override fun setButtonText(index: Int, text: String) {
-        when(index){
-            0 -> vb?.btnCounter1?.text = text
-            1 -> vb?.btnCounter2?.text = text
-            2 -> vb?.btnCounter3?.text = text
-        }
+    override fun setCounter1Value(value: String) {
+        vb?.btnCounter1?.text = value
+    }
+
+    override fun setCounter2Text(value: String) {
+        vb?.btnCounter2?.text = value
+    }
+
+    override fun setCounter3Text(value: String) {
+        vb?.btnCounter3?.text = value
     }
 }
 
