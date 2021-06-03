@@ -1,15 +1,16 @@
 package ru.geekbrains.popularlibraries
 
-import androidx.appcompat.app.AppCompatActivity
+
 import android.os.Bundle
-import android.view.View
+import moxy.MvpAppCompatActivity
+import moxy.ktx.moxyPresenter
 import ru.geekbrains.popularlibraries.databinding.ActivityMainBinding
 
 
-class MainActivity : AppCompatActivity(), MainView {
+class MainActivity :MvpAppCompatActivity(), MainView {
 
     private var vb: ActivityMainBinding? = null
-    val presenter = MainPresenter(CountersModel(), this)
+    private val presenter by moxyPresenter { MainPresenter(CountersModel()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
