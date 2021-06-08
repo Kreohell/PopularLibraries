@@ -6,7 +6,7 @@ import ru.geekbrains.popularlibraries.fragments.UsersFragment
 import ru.geekbrains.popularlibraries.model.GithubUser
 import ru.geekbrains.popularlibraries.presenter.IScreens
 
-class AndroidScreens : IScreens {
+object AndroidScreens : IScreens {
     override fun users() = FragmentScreen { UsersFragment.newInstance() }
 
     override fun user(user: GithubUser) = FragmentScreen { UserFragment.newInstance(user) }
