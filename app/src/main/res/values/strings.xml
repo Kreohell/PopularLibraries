@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PopularLibraries</string>
+    <string name="counter_one">counter_one</string>
+    <string name="counter_two">counter_two</string>
+    <string name="counter_three">counter_three</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
