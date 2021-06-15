@@ -7,11 +7,12 @@ import moxy.MvpPresenter
 import ru.geekbrains.popularlibraries.AndroidScreens
 import ru.geekbrains.popularlibraries.model.GithubUser
 import ru.geekbrains.popularlibraries.model.GithubUsersRepo
+import ru.geekbrains.popularlibraries.model.IGithubUsersRepo
 import ru.geekbrains.popularlibraries.views.UserItemView
 import ru.geekbrains.popularlibraries.views.UsersView
 
 class UsersPresenter(
-    private val usersRepo: GithubUsersRepo,
+    private val usersRepo: IGithubUsersRepo,
     private val router: Router,
     private val uiSched: Scheduler
 ) : MvpPresenter<UsersView>() {
@@ -22,7 +23,8 @@ class UsersPresenter(
 
         override fun bindView(view: UserItemView) {
             val user = users[view.pos]
-            view.setLogin(user.login)
+            user.login?.let { view.setLogin(it) }
+            user.avatarUrl?.let { view.loadAvatar(it) }
         }
 
         override fun getCount() = users.size
@@ -37,7 +39,7 @@ class UsersPresenter(
         loadData()
         usersListPresenter.itemClickListener = { itemView ->
             val user = usersListPresenter.users[itemView.pos]
-            router.navigateTo(AndroidScreens.user(user))
+            router.navigateTo(AndroidScreens.UserScreen(user).getFragment())
         }
     }
 
@@ -59,7 +61,7 @@ class UsersPresenter(
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         disposable.dispose()
+        super.onDestroy()
     }
 }

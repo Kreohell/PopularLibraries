@@ -10,8 +10,11 @@ import moxy.ktx.moxyPresenter
 import ru.geekbrains.popularlibraries.AndroidScreens
 import ru.geekbrains.popularlibraries.App
 import ru.geekbrains.popularlibraries.adapters.UsersRVAdapter
+import ru.geekbrains.popularlibraries.api.ApiHolder
+import ru.geekbrains.popularlibraries.api.GlideImageLoader
 import ru.geekbrains.popularlibraries.databinding.FragmentUsersBinding
 import ru.geekbrains.popularlibraries.model.GithubUsersRepo
+import ru.geekbrains.popularlibraries.model.RetrofitGithubUsersRepo
 import ru.geekbrains.popularlibraries.presenter.BackButtonListener
 import ru.geekbrains.popularlibraries.presenter.UsersPresenter
 import ru.geekbrains.popularlibraries.views.UsersView
@@ -22,9 +25,13 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     }
 
     val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(GithubUsersRepo(), App.instance.router, AndroidSchedulers.mainThread())
+        UsersPresenter(
+            RetrofitGithubUsersRepo(ApiHolder.api),
+            App.instance.router,
+            AndroidSchedulers.mainThread()
+        )
     }
-    var adapter: UsersRVAdapter? = null
+    private var adapter: UsersRVAdapter? = null
 
     private var vb: FragmentUsersBinding? = null
 
@@ -40,11 +47,13 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     override fun onDestroyView() {
         super.onDestroyView()
         vb = null
+        adapter = null
+        super.onDestroyView()
     }
 
     override fun init() {
         vb?.rvUsers?.layoutManager = LinearLayoutManager(context)
-        adapter = UsersRVAdapter(presenter.usersListPresenter)
+        adapter = UsersRVAdapter(presenter.usersListPresenter, GlideImageLoader())
         vb?.rvUsers?.adapter = adapter
     }
 
