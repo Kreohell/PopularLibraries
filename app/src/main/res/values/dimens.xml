@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="tv_text_size_frag_repo">20sp</dimen>
+    <dimen name="user_text_size">20sp</dimen>
+    <dimen name="margin_rv_item_repo">10dp</dimen>
+    <dimen name="ts_item_rv_repo">20sp</dimen>
+</resources>
