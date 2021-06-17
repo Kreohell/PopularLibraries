@@ -10,23 +10,33 @@ import moxy.ktx.moxyPresenter
 import ru.geekbrains.popularlibraries.App
 import ru.geekbrains.popularlibraries.adapters.RepositoriesRVAdapter
 import ru.geekbrains.popularlibraries.api.ApiHolder
+import ru.geekbrains.popularlibraries.cache.GithubReposCacheImpl
 import ru.geekbrains.popularlibraries.databinding.FragmentUserBinding
 import ru.geekbrains.popularlibraries.model.GithubUser
 import ru.geekbrains.popularlibraries.model.RetrofitGithubRepositoriesRepo
+import ru.geekbrains.popularlibraries.network.AndroidNetworkStatus
 import ru.geekbrains.popularlibraries.presenter.BackButtonListener
 import ru.geekbrains.popularlibraries.presenter.UserPresenter
+import ru.geekbrains.popularlibraries.room.Database
 import ru.geekbrains.popularlibraries.views.UserView
 
 class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private var vb: FragmentUserBinding? = null
     private var adapter: RepositoriesRVAdapter? = null
+    private val database: Database by lazy {
+        Database.apply { create(requireContext()) }.getInstance()
+    }
     val presenter: UserPresenter by moxyPresenter {
         val user = arguments?.getParcelable<GithubUser>(USER) as GithubUser
         UserPresenter(
             App.instance.router,
             user,
-            RetrofitGithubRepositoriesRepo(ApiHolder.api),
+            RetrofitGithubRepositoriesRepo(
+                ApiHolder.api,
+                AndroidNetworkStatus(requireContext()),
+                GithubReposCacheImpl(database)
+            ),
             AndroidSchedulers.mainThread()
         )
     }

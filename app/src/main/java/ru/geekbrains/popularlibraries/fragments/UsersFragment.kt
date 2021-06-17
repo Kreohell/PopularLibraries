@@ -12,21 +12,30 @@ import ru.geekbrains.popularlibraries.App
 import ru.geekbrains.popularlibraries.adapters.UsersRVAdapter
 import ru.geekbrains.popularlibraries.api.ApiHolder
 import ru.geekbrains.popularlibraries.api.GlideImageLoader
+import ru.geekbrains.popularlibraries.cache.GithubUsersCacheImpl
 import ru.geekbrains.popularlibraries.databinding.FragmentUsersBinding
 import ru.geekbrains.popularlibraries.model.GithubUsersRepo
 import ru.geekbrains.popularlibraries.model.RetrofitGithubUsersRepo
+import ru.geekbrains.popularlibraries.network.AndroidNetworkStatus
 import ru.geekbrains.popularlibraries.presenter.BackButtonListener
 import ru.geekbrains.popularlibraries.presenter.UsersPresenter
+import ru.geekbrains.popularlibraries.room.Database
 import ru.geekbrains.popularlibraries.views.UsersView
 
 class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
         fun newInstance() = UsersFragment()
     }
-
+    val database: Database by lazy {
+        Database.apply { create(requireContext()) }.getInstance()
+    }
     val presenter: UsersPresenter by moxyPresenter {
         UsersPresenter(
-            RetrofitGithubUsersRepo(ApiHolder.api),
+            RetrofitGithubUsersRepo(
+                ApiHolder.api,
+                AndroidNetworkStatus(requireContext()),
+                GithubUsersCacheImpl(database)
+            ),
             App.instance.router,
             AndroidSchedulers.mainThread()
         )
