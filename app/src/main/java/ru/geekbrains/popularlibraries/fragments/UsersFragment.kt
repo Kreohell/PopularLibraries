@@ -26,19 +26,10 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     companion object {
         fun newInstance() = UsersFragment()
     }
-    val database: Database by lazy {
-        Database.apply { create(requireContext()) }.getInstance()
-    }
     val presenter: UsersPresenter by moxyPresenter {
-        UsersPresenter(
-            RetrofitGithubUsersRepo(
-                ApiHolder.api,
-                AndroidNetworkStatus(requireContext()),
-                GithubUsersCacheImpl(database)
-            ),
-            App.instance.router,
-            AndroidSchedulers.mainThread()
-        )
+        UsersPresenter().apply {
+            App.instance.appComponent.inject(this)
+        }
     }
     private var adapter: UsersRVAdapter? = null
 
@@ -56,8 +47,6 @@ class UsersFragment : MvpAppCompatFragment(), UsersView, BackButtonListener {
     override fun onDestroyView() {
         super.onDestroyView()
         vb = null
-        adapter = null
-        super.onDestroyView()
     }
 
     override fun init() {

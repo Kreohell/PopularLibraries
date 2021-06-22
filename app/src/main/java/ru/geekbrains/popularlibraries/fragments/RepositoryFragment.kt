@@ -18,7 +18,7 @@ class RepositoryFragment : MvpAppCompatFragment(), RepoView, BackButtonListener 
     private var vb: FragmentRepositoryBinding? = null
     val presenter: RepoPresenter by moxyPresenter {
         val repo = arguments?.getParcelable<GitHubRepo>(REPO) as GitHubRepo
-        RepoPresenter(App.instance.router, repo)
+        RepoPresenter(repo).apply { App.instance.appComponent.inject(this) }
     }
 
     override fun onCreateView(

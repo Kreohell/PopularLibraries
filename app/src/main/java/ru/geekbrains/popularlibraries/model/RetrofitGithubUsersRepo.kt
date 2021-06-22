@@ -5,11 +5,12 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import ru.geekbrains.popularlibraries.api.IDataSource
 import ru.geekbrains.popularlibraries.cache.GithubUsersCache
 import ru.geekbrains.popularlibraries.network.INetworkStatus
+import javax.inject.Inject
 
-class RetrofitGithubUsersRepo(
-    val api: IDataSource,
-    val networkStatus: INetworkStatus,
-    val githubUsersCache: GithubUsersCache
+class RetrofitGithubUsersRepo @Inject constructor(
+    private val api: IDataSource,
+    private val networkStatus: INetworkStatus,
+    private val githubUsersCache: GithubUsersCache
 ): IGithubUsersRepo {
 
     override fun getUsers(): Single<List<GithubUser>> =

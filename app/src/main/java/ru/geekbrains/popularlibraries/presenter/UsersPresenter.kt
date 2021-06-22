@@ -10,12 +10,17 @@ import ru.geekbrains.popularlibraries.model.GithubUsersRepo
 import ru.geekbrains.popularlibraries.model.IGithubUsersRepo
 import ru.geekbrains.popularlibraries.views.UserItemView
 import ru.geekbrains.popularlibraries.views.UsersView
+import javax.inject.Inject
 
-class UsersPresenter(
-    private val usersRepo: IGithubUsersRepo,
-    private val router: Router,
-    private val uiSched: Scheduler
-) : MvpPresenter<UsersView>() {
+class UsersPresenter : MvpPresenter<UsersView>() {
+    @Inject
+    lateinit var usersRepo: IGithubUsersRepo
+
+    @Inject
+    lateinit var router: Router
+
+    @Inject
+    lateinit var uiSched: Scheduler
 
     class UsersListPresenter : IUserListPresenter {
         val users = mutableListOf<GithubUser>()

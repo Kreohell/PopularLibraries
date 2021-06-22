@@ -6,11 +6,12 @@ import ru.geekbrains.popularlibraries.api.IDataSource
 import ru.geekbrains.popularlibraries.cache.GithubRepositoriesCache
 import ru.geekbrains.popularlibraries.network.INetworkStatus
 import java.lang.RuntimeException
+import javax.inject.Inject
 
-class RetrofitGithubRepositoriesRepo(
-    val api: IDataSource,
-    val networkStatus: INetworkStatus,
-    val githubReposCache: GithubRepositoriesCache
+class RetrofitGithubRepositoriesRepo @Inject constructor(
+    private val api: IDataSource,
+    private val networkStatus: INetworkStatus,
+    private val githubReposCache: GithubRepositoriesCache
 ): IGithubRepositoriesRepo {
 
     override fun getRepositories(user: GithubUser): Single<List<GitHubRepo>> =

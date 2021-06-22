@@ -24,21 +24,11 @@ class UserFragment : MvpAppCompatFragment(), UserView, BackButtonListener {
 
     private var vb: FragmentUserBinding? = null
     private var adapter: RepositoriesRVAdapter? = null
-    private val database: Database by lazy {
-        Database.apply { create(requireContext()) }.getInstance()
-    }
+
     val presenter: UserPresenter by moxyPresenter {
-        val user = arguments?.getParcelable<GithubUser>(USER) as GithubUser
-        UserPresenter(
-            App.instance.router,
-            user,
-            RetrofitGithubRepositoriesRepo(
-                ApiHolder.api,
-                AndroidNetworkStatus(requireContext()),
-                GithubReposCacheImpl(database)
-            ),
-            AndroidSchedulers.mainThread()
-        )
+        UserPresenter(arguments?.getParcelable<GithubUser>(USER) as GithubUser).apply {
+            App.instance.appComponent.inject(this)
+        }
     }
 
     override fun onCreateView(

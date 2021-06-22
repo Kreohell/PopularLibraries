@@ -9,8 +9,9 @@ import ru.geekbrains.popularlibraries.model.GithubUser
 import ru.geekbrains.popularlibraries.room.Database
 import ru.geekbrains.popularlibraries.room.RoomGithubRepo
 import java.lang.RuntimeException
+import javax.inject.Inject
 
-class GithubReposCacheImpl(private val db: Database): GithubRepositoriesCache {
+class GithubReposCacheImpl @Inject constructor(private val db: Database): GithubRepositoriesCache {
 
     override fun getUserRepos(user: GithubUser): Single<List<GitHubRepo>> =
         Single.fromCallable {

@@ -8,13 +8,15 @@ import ru.geekbrains.popularlibraries.model.GitHubRepo
 import ru.geekbrains.popularlibraries.model.GithubUser
 import ru.geekbrains.popularlibraries.model.IGithubRepositoriesRepo
 import ru.geekbrains.popularlibraries.views.UserView
+import javax.inject.Inject
 
-class UserPresenter(
-    private val router: Router,
-    private val user: GithubUser,
-    private val repositoriesRepo: IGithubRepositoriesRepo,
-    private val uiScheduler: Scheduler
-) : MvpPresenter<UserView>() {
+class UserPresenter(private val user: GithubUser) : MvpPresenter<UserView>() {
+    @Inject
+    lateinit var router: Router
+    @Inject
+    lateinit var uiScheduler: Scheduler
+    @Inject
+    lateinit var iGithubRepositoriesRepo: IGithubRepositoriesRepo
 
     class RepoListPresenter: IRepoListPresenter {
 
@@ -44,7 +46,7 @@ class UserPresenter(
     }
 
     fun loadData() {
-        repositoriesRepo.getRepositories(user)
+        iGithubRepositoriesRepo.getRepositories(user)
             .observeOn(uiScheduler)
             .subscribe({ repos -> updateRepos(repos) }, { it.printStackTrace() })
     }
